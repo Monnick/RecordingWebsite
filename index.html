@@ -11,6 +11,7 @@
             <input type="file" capture="user">
             <video id="player" controls autoplay></video>
             <button id="stop">Stop</button>
+            <button class="recordbutton" onclick="startRecording();">RECORD</button>
         </div>
         <script language="javascript" type="text/javascript">
             //const supported = 'mediaDevices' in navigator;
@@ -59,11 +60,13 @@
             var webcamstream;
 
             if (navigator.getUserMedia) {
-              navigator.getUserMedia({audio: true, video: true}, function(stream) {
-                video.src = window.URL.createObjectURL(stream);
-                webcamstream = stream;
-            //  streamrecorder = webcamstream.record();
-              }, onVideoFail);
+              navigator.mediaDevices.getUserMedia(constraints)
+                .then((stream) => {
+                  // Attach the video stream to the video element and autoplay.
+                  player.srcObject = stream;
+                  webcamstream = stream;
+                  //streamrecorder = webcamstream.record();
+                }, onVideoFail);
             } else {
                 alert ('failed');
             }
