@@ -70,14 +70,22 @@
             } else {
                 alert ('failed');
             }
-
+            
+            function addBlob(event) {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                }
+            }
+            
             function startRecording() {
                 //streamRecorder = webcamstream.record();
                 streamRecorder = new MediaRecorder(webcamstream);
+                streamRecorder.ondataavailable = addBlob; 
                 setTimeout(stopRecording, 10000);
             }
             function stopRecording() {
-                streamRecorder.getRecordedData(postVideoToServer);
+                streamRecorder.stop();
+                postVideoToServer(recordedChunks);
             }
             function postVideoToServer(videoblob) {
 
