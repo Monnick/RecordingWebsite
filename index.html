@@ -13,7 +13,7 @@
             const stopButton = document.getElementById('stop');
 
             const constraints = {
-                video: true,
+                video: { facingMode: "user" },
             };
 
             navigator.mediaDevices.getUserMedia(constraints)
