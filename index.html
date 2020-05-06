@@ -1,0 +1,36 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <div>
+            <input type="file" accept="video/*" capture="user">
+            <video id="player" controls autoplay></video>
+            <button id="stop">Stop</button>
+        </div>
+        <script>
+            const supported = 'mediaDevices' in navigator;
+            const player = document.getElementById('player');
+            const stopButton = document.getElementById('stop');
+
+            const constraints = {
+                video: true,
+            };
+
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then((stream) => {
+                player.srcObject = stream;
+                });
+
+                stopButton.addEventListener('click', () => {
+              // Stop all video streams.
+              player.srcObject.getVideoTracks().forEach(track => track.stop());
+            });
+          
+            navigator.mediaDevices.getUserMedia(constraints)
+              .then((stream) => {
+                // Attach the video stream to the video element and autoplay.
+                player.srcObject = stream;
+              });
+          </script>
+    </body>
+</html>
