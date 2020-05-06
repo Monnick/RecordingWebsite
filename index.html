@@ -64,7 +64,7 @@
                 .then((stream) => {
                   // Attach the video stream to the video element and autoplay.
                   player.srcObject = stream;
-                  //webcamstream = stream;
+                  webcamstream = stream;
                   //streamrecorder = webcamstream.record();
                 }, onVideoFail);
             } else {
@@ -73,7 +73,7 @@
 
             function startRecording() {
                 //streamRecorder = webcamstream.record();
-                streamRecorder = new MediaRecorder(stream);
+                streamRecorder = new MediaRecorder(webcamstream);
                 setTimeout(stopRecording, 10000);
             }
             function stopRecording() {
