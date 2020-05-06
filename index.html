@@ -1,5 +1,10 @@
 <html>
     <head>
+        <script>
+            const constraints = {
+                video: { facingMode: "user" }
+            };
+        </script>
     </head>
     <body>
         <div>
@@ -11,10 +16,6 @@
             const supported = 'mediaDevices' in navigator;
             const player = document.getElementById('player');
             const stopButton = document.getElementById('stop');
-
-            const constraints = {
-                video: { facingMode: "user" },
-            };
 
             navigator.mediaDevices.getUserMedia(constraints)
                 .then((stream) => {
