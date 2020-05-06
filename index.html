@@ -2,7 +2,7 @@
     <head>
         <script>
             const constraints = {
-                video: { facingMode: "user" }
+                video: { facingMode: "user" }, audio: true
             };
         </script>
     </head>
@@ -12,26 +12,80 @@
             <video id="player" controls autoplay></video>
             <button id="stop">Stop</button>
         </div>
-        <script>
-            const supported = 'mediaDevices' in navigator;
-            const player = document.getElementById('player');
-            const stopButton = document.getElementById('stop');
+        <script language="javascript" type="text/javascript">
+            //const supported = 'mediaDevices' in navigator;
+            //const player = document.getElementById('player');
+            //const stopButton = document.getElementById('stop');
 
-            navigator.mediaDevices.getUserMedia(constraints)
-                .then((stream) => {
-                player.srcObject = stream;
-                });
+            //navigator.mediaDevices.getUserMedia(constraints)
+            //    .then((stream) => {
+            //    player.srcObject = stream;
+            //    });
 
-                stopButton.addEventListener('click', () => {
-              // Stop all video streams.
-              player.srcObject.getVideoTracks().forEach(track => track.stop());
-            });
+            //    stopButton.addEventListener('click', () => {
+            //  // Stop all video streams.
+            //  player.srcObject.getVideoTracks().forEach(track => track.stop());
+            //});
           
-            navigator.mediaDevices.getUserMedia(constraints)
-              .then((stream) => {
-                // Attach the video stream to the video element and autoplay.
-                player.srcObject = stream;
-              });
+            //navigator.mediaDevices.getUserMedia(constraints)
+            //  .then((stream) => {
+            //    // Attach the video stream to the video element and autoplay.
+            //    player.srcObject = stream;
+            //  });
+            function onVideoFail(e) {
+              console.log('webcam fail!', e);
+            };
+
+            function hasGetUserMedia() {
+              // Note: Opera is unprefixed.
+              return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+                        navigator.mozGetUserMedia || navigator.msGetUserMedia);
+            }
+
+            if (hasGetUserMedia()) {
+              // Good to go!
+            } else {
+              alert('getUserMedia() is not supported in your browser');
+            }
+
+            window.URL = window.URL || window.webkitURL;
+            navigator.getUserMedia  = navigator.getUserMedia || 
+                                     navigator.webkitGetUserMedia ||
+                                      navigator.mozGetUserMedia || 
+                                       navigator.msGetUserMedia;
+
+            var video = document.querySelector('video');
+            var streamRecorder;
+            var webcamstream;
+
+            if (navigator.getUserMedia) {
+              navigator.getUserMedia({audio: true, video: true}, function(stream) {
+                video.src = window.URL.createObjectURL(stream);
+                webcamstream = stream;
+            //  streamrecorder = webcamstream.record();
+              }, onVideoFail);
+            } else {
+                alert ('failed');
+            }
+
+            function startRecording() {
+                streamRecorder = webcamstream.record();
+                setTimeout(stopRecording, 10000);
+            }
+            function stopRecording() {
+                streamRecorder.getRecordedData(postVideoToServer);
+            }
+            function postVideoToServer(videoblob) {
+
+                var data = {};
+                data.video = videoblob;
+                data.metadata = 'test metadata';
+                data.action = "upload_video";
+                //jQuery.post("http://www.foundthru.co.uk/uploadvideo.php", data, onUploadSuccess);
+            }
+            function onUploadSuccess() {
+                alert ('video uploaded');
+            }
           </script>
     </body>
 </html>
